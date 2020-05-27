@@ -177,11 +177,8 @@ def search_sal(salary):
     client = MongoClient('localhost', 27017)
     db = client['vacancy']
     vac = []
-    for item_max in db.vacancy.find({'salary_max': {'$gte': salary}}):
+    for item_max in db.vacancy.find({'$or': [{'salary_min': {'$gte': salary}}, {'salary_max': {'$gte': salary}}]}):
         vac.append(item_max)
-    for item_min in db.vacancy.find({'salary_min': {'$gte': salary}}):
-        if item_min not in vac:
-            vac.append(item_min)
     return vac
 
 pprint(search_sal(int(input('введите минимальный порог оплаты '))))
